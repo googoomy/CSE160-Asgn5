@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=yes"
+    />
+    <title>Three.js - Assignment 5 James Gu - Impala in Apple Forest</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+      }
+      #c {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="c"></canvas>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://threejs.org/build/three.module.js",
+          "three/addons/": "https://threejs.org/examples/jsm/"
+        }
+      }
+    </script>
+    <!-- Remove this when import maps will be widely supported -->
+    <script
+      async
+      src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"
+    ></script>
+  </body>
+
+  <script type="module">
+    // beginning code from Lights tutorial
+    // Three.js - Lights - Physically Correct Lights
+    // from https://threejs.org/manual/examples/lights-point-physically-correct.html
+
+    import * as THREE from "three";
+    import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+    import { RectAreaLightUniformsLib } from "three/addons/lights/RectAreaLightUniformsLib.js";
+    import { RectAreaLightHelper } from "three/addons/helpers/RectAreaLightHelper.js";
+    import { GUI } from "three/addons/libs/lil-gui.module.min.js";
+    import { OBJLoader } from "three/addons/loaders/OBJLoader.js";
+    import { MTLLoader } from "three/addons/loaders/MTLLoader.js";
+    //import { OBJLoader } from "/examples/jsm/loaders/OBJLoader.js";
+    //import { MTLLoader } from "/examples/jsm/loaders/MTLLoader.js";
+
+    function main() {
+      const canvas = document.querySelector("#c");
+      const renderer = new THREE.WebGLRenderer({ canvas });
+      renderer.physicallyCorrectLights = true;
+      RectAreaLightUniformsLib.init();
+
+      const fov = 45;
+      const aspect = 2; // the canvas default
+      const near = 0.1;
+      const far = 100;
+      const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+      camera.position.set(0, 10, 20);
+
+      const controls = new OrbitControls(camera, canvas);
+      controls.target.set(0, 5, 0);
+      controls.update();
+
+      const scene = new THREE.Scene();
+
+      //scene.background = new THREE.Color("black");
+
+      {
+        const planeSize = 40;
+
+        const loader = new THREE.TextureLoader();
+        //https://archivetextures.net/?a=download&id=83573
+        const texture = loader.load("90f3d2201c85c872363127a1842ef1d1.jpg");
+        texture.wrapS = THREE.RepeatWrapping;
+        texture.wrapT = THREE.RepeatWrapping;
+        texture.magFilter = THREE.NearestFilter;
+        const repeats = planeSize / 2;
+        texture.repeat.set(repeats, repeats);
+
+        const planeGeo = new THREE.PlaneGeometry(planeSize, planeSize);
+        const planeMat = new THREE.MeshPhongMaterial({
+          map: texture,
+          side: THREE.DoubleSide
+        });
+        const mesh = new THREE.Mesh(planeGeo, planeMat);
+        mesh.rotation.x = Math.PI * -0.5;
+        scene.add(mesh);
+      }
+      //OBJECT 1
+      {
+        const cubeSize = 4;
+        const cubeGeo = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
+        const cubeMat = new THREE.MeshPhongMaterial({ color: "#00FF00" });
+        const mesh = new THREE.Mesh(cubeGeo, cubeMat);
+        mesh.position.set(cubeSize + 1, cubeSize / 2, 0);
+        scene.add(mesh);
+      }
+    //OBJECT 2
+      {
+        const cubeSize = 4;
+        const cubeGeo = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
+        const cubeMat = new THREE.MeshPhongMaterial({ color: "#00FF00" });
+        const mesh = new THREE.Mesh(cubeGeo, cubeMat);
+        mesh.position.set(cubeSize + 10, cubeSize / 2, 0);
+        scene.add(mesh);
+      }
+    //OBJECT 3
+      {
+        const cubeSize = 4;
+        const cubeGeo = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
+        const cubeMat = new THREE.MeshPhongMaterial({ color: "#00FF00" });
+        const mesh = new THREE.Mesh(cubeGeo, cubeMat);
+        mesh.position.set(cubeSize - 8, cubeSize / 2, -8);
+        scene.add(mesh);
+      }
+    //OBJECT 4
+      {
+        const sphereRadius = 0.5;
+        const sphereWidthDivisions = 32;
+        const sphereHeightDivisions = 16;
+        const sphereGeo = new THREE.SphereGeometry(
+          sphereRadius,
+          sphereWidthDivisions,
+          sphereHeightDivisions
+        );
+        const sphereMat = new THREE.MeshPhongMaterial({ color: "#CA5832" });
+        const mesh = new THREE.Mesh(sphereGeo, sphereMat);
+        mesh.position.set(-sphereRadius - 4, sphereRadius + 2, -6);
+        scene.add(mesh);
+      }
+    //OBJECT 5
+      {
+        const sphereRadius = 0.5;
+        const sphereWidthDivisions = 32;
+        const sphereHeightDivisions = 16;
+        const sphereGeo = new THREE.SphereGeometry(
+          sphereRadius,
+          sphereWidthDivisions,
+          sphereHeightDivisions
+        );
+        const sphereMat = new THREE.MeshPhongMaterial({ color: "#CA5832" });
+        const mesh = new THREE.Mesh(sphereGeo, sphereMat);
+        mesh.position.set(-sphereRadius - 3, sphereRadius + 3.5, -9);
+        scene.add(mesh);
+      }
+    //OBJECT 6
+      {
+        const sphereRadius = 0.5;
+        const sphereWidthDivisions = 32;
+        const sphereHeightDivisions = 16;
+        const sphereGeo = new THREE.SphereGeometry(
+          sphereRadius,
+          sphereWidthDivisions,
+          sphereHeightDivisions
+        );
+        const sphereMat = new THREE.MeshPhongMaterial({ color: "#CA5832" });
+        const mesh = new THREE.Mesh(sphereGeo, sphereMat);
+        mesh.position.set(-sphereRadius - 1.5, sphereRadius + 1.5, -8.5);
+        scene.add(mesh);
+      }
+    //OBJECT 7
+      {
+        const sphereRadius = 0.5;
+        const sphereWidthDivisions = 32;
+        const sphereHeightDivisions = 16;
+        const sphereGeo = new THREE.SphereGeometry(
+          sphereRadius,
+          sphereWidthDivisions,
+          sphereHeightDivisions
+        );
+        const sphereMat = new THREE.MeshPhongMaterial({ color: "#CA5832" });
+        const mesh = new THREE.Mesh(sphereGeo, sphereMat);
+        mesh.position.set(-sphereRadius - 1.5, sphereRadius, -2.5);
+        scene.add(mesh);
+      }
+    //OBJECT 8
+      {
+        const sphereRadius = 0.5;
+        const sphereWidthDivisions = 32;
+        const sphereHeightDivisions = 16;
+        const sphereGeo = new THREE.SphereGeometry(
+          sphereRadius,
+          sphereWidthDivisions,
+          sphereHeightDivisions
+        );
+        const sphereMat = new THREE.MeshPhongMaterial({ color: "#CA5832" });
+        const mesh = new THREE.Mesh(sphereGeo, sphereMat);
+        mesh.position.set(-sphereRadius - 11.5, sphereRadius, -4.5);
+        scene.add(mesh);
+      }
+    //OBJECT 9
+      {
+        const sphereRadius = 0.5;
+        const sphereWidthDivisions = 32;
+        const sphereHeightDivisions = 16;
+        const sphereGeo = new THREE.SphereGeometry(
+          sphereRadius,
+          sphereWidthDivisions,
+          sphereHeightDivisions
+        );
+        const sphereMat = new THREE.MeshPhongMaterial({ color: "#CA5832" });
+        const mesh = new THREE.Mesh(sphereGeo, sphereMat);
+        mesh.position.set(-sphereRadius - 4.5, sphereRadius, 6);
+        scene.add(mesh);
+      }
+
+      //from loading .obj file tutorial
+      //3D OBJECT
+      {
+        const mtlLoader = new MTLLoader();
+        mtlLoader.load("sculpture-impala.mtl", (mtl) => {
+          mtl.preload();
+          const objLoader = new OBJLoader();
+          objLoader.setMaterials(mtl);
+          objLoader.load("sculpture-impala.obj", (root) => {
+            scene.add(root);
+          });
+        });
+      }
+    //OBJECT 10
+      {
+        const sphereRadius = 3;
+        const sphereWidthDivisions = 32;
+        const sphereHeightDivisions = 16;
+        const sphereGeo = new THREE.CylinderGeometry(
+          sphereRadius / 3,
+          sphereRadius / 3,
+          sphereWidthDivisions / 4,
+          sphereHeightDivisions / 2
+        );
+        const sphereMat = new THREE.MeshPhongMaterial({ color: "#CA8" });
+        const mesh = new THREE.Mesh(sphereGeo, sphereMat);
+        mesh.position.set(-sphereRadius - 5, sphereRadius + 1, 8);
+        scene.add(mesh);
+      }
+          //OBJECT 11
+      {
+        const sphereRadius = 3;
+        const sphereWidthDivisions = 32;
+        const sphereHeightDivisions = 16;
+        const sphereGeo = new THREE.SphereGeometry(
+          sphereRadius,
+          sphereWidthDivisions,
+          sphereHeightDivisions
+        );
+        const sphereMat = new THREE.MeshPhongMaterial({ color: "#00FF00" });
+        const mesh = new THREE.Mesh(sphereGeo, sphereMat);
+        mesh.position.set(-sphereRadius - 5, sphereRadius + 6, 8);
+        scene.add(mesh);
+      }
+    //OBJECT 12
+      {
+        const sphereRadius = 3;
+        const sphereWidthDivisions = 32;
+        const sphereHeightDivisions = 16;
+        const sphereGeo = new THREE.CylinderGeometry(
+          sphereRadius / 3,
+          sphereRadius / 3,
+          sphereWidthDivisions / 4,
+          sphereHeightDivisions / 2
+        );
+        const sphereMat = new THREE.MeshPhongMaterial({ color: "#CA8" });
+        const mesh = new THREE.Mesh(sphereGeo, sphereMat);
+        mesh.position.set(-sphereRadius + 5, sphereRadius + 1, -8);
+        scene.add(mesh);
+      }
+          //OBJECT 13
+      {
+        const sphereRadius = 3;
+        const sphereWidthDivisions = 32;
+        const sphereHeightDivisions = 16;
+        const sphereGeo = new THREE.SphereGeometry(
+          sphereRadius,
+          sphereWidthDivisions,
+          sphereHeightDivisions
+        );
+        const sphereMat = new THREE.MeshPhongMaterial({ color: "#00FF00" });
+        const mesh = new THREE.Mesh(sphereGeo, sphereMat);
+        mesh.position.set(-sphereRadius + 5, sphereRadius + 6, -8);
+        scene.add(mesh);
+      }
+    //OBJECT 14
+      {
+        const sphereRadius = 3;
+        const sphereWidthDivisions = 32;
+        const sphereHeightDivisions = 16;
+        const sphereGeo = new THREE.CylinderGeometry(
+          sphereRadius / 3,
+          sphereRadius / 3,
+          sphereWidthDivisions / 4,
+          sphereHeightDivisions / 2
+        );
+        const sphereMat = new THREE.MeshPhongMaterial({ color: "#CA8" });
+        const mesh = new THREE.Mesh(sphereGeo, sphereMat);
+        mesh.position.set(-sphereRadius + 15, sphereRadius + 1, -8);
+        scene.add(mesh);
+      }
+          //OBJECT 15
+      {
+        const sphereRadius = 3;
+        const sphereWidthDivisions = 32;
+        const sphereHeightDivisions = 16;
+        const sphereGeo = new THREE.SphereGeometry(
+          sphereRadius,
+          sphereWidthDivisions,
+          sphereHeightDivisions
+        );
+        const sphereMat = new THREE.MeshPhongMaterial({ color: "#00FF00" });
+        const mesh = new THREE.Mesh(sphereGeo, sphereMat);
+        mesh.position.set(-sphereRadius + 15, sphereRadius + 6, -8);
+        scene.add(mesh);
+      }
+    //OBJECT 16
+      {
+        const sphereRadius = 3;
+        const sphereWidthDivisions = 32;
+        const sphereHeightDivisions = 16;
+        const sphereGeo = new THREE.CylinderGeometry(
+          sphereRadius / 3,
+          sphereRadius / 3,
+          sphereWidthDivisions / 4,
+          sphereHeightDivisions / 2
+        );
+        const sphereMat = new THREE.MeshPhongMaterial({ color: "#CA8" });
+        const mesh = new THREE.Mesh(sphereGeo, sphereMat);
+        mesh.position.set(-sphereRadius - 5, sphereRadius + 1, -8);
+        scene.add(mesh);
+      }
+          //OBJECT 17
+      {
+        const sphereRadius = 3;
+        const sphereWidthDivisions = 32;
+        const sphereHeightDivisions = 16;
+        const sphereGeo = new THREE.SphereGeometry(
+          sphereRadius,
+          sphereWidthDivisions,
+          sphereHeightDivisions
+        );
+        const sphereMat = new THREE.MeshPhongMaterial({ color: "#00FF00" });
+        const mesh = new THREE.Mesh(sphereGeo, sphereMat);
+        mesh.position.set(-sphereRadius - 5, sphereRadius + 6, -8);
+        scene.add(mesh);
+      }
+    //OBJECT 18
+      {
+        const sphereRadius = 3;
+        const sphereWidthDivisions = 32;
+        const sphereHeightDivisions = 16;
+        const sphereGeo = new THREE.CylinderGeometry(
+          sphereRadius / 3,
+          sphereRadius / 3,
+          sphereWidthDivisions / 4,
+          sphereHeightDivisions / 2
+        );
+        const sphereMat = new THREE.MeshPhongMaterial({ color: "#CA8" });
+        const mesh = new THREE.Mesh(sphereGeo, sphereMat);
+        mesh.position.set(-sphereRadius - 5, sphereRadius + 1, 0);
+        scene.add(mesh);
+      }
+          //OBJECT 19
+      {
+        const sphereRadius = 3;
+        const sphereWidthDivisions = 32;
+        const sphereHeightDivisions = 16;
+        const sphereGeo = new THREE.SphereGeometry(
+          sphereRadius,
+          sphereWidthDivisions,
+          sphereHeightDivisions
+        );
+        const sphereMat = new THREE.MeshPhongMaterial({ color: "#00FF00" });
+        const mesh = new THREE.Mesh(sphereGeo, sphereMat);
+        mesh.position.set(-sphereRadius - 5, sphereRadius + 6, 0);
+        scene.add(mesh);
+      }
+
+      //image from https://polyhaven.com/a/drakensberg_solitary_mountain
+      // code from following backgrounds and skybox tutorial
+      //skybox
+      {
+        const loader = new THREE.TextureLoader();
+        const texture = loader.load(
+          "drakensberg_solitary_mountain_4k.jpg",
+          () => {
+            const rt = new THREE.WebGLCubeRenderTarget(texture.image.height);
+            rt.fromEquirectangularTexture(renderer, texture);
+            scene.background = rt.texture;
+          }
+        );
+      }
+
+      class ColorGUIHelper {
+        constructor(object, prop) {
+          this.object = object;
+          this.prop = prop;
+        }
+        get value() {
+          return `#${this.object[this.prop].getHexString()}`;
+        }
+        set value(hexString) {
+          this.object[this.prop].set(hexString);
+        }
+      }
+
+      function makeXYZGUI(gui, vector3, name, onChangeFn) {
+        const folder = gui.addFolder(name);
+        folder.add(vector3, "x", -20, 20).onChange(onChangeFn);
+        folder.add(vector3, "y", 0, 20).onChange(onChangeFn);
+        folder.add(vector3, "z", -20, 20).onChange(onChangeFn);
+        folder.open();
+      }
+
+      //LIGHT ONE
+      {
+        const color = 0xffffff;
+        const intensity = 10;
+        const light = new THREE.PointLight(color, intensity);
+        light.power = 1000;
+        light.decay = 2;
+        light.distance = Infinity;
+        light.position.set(0, 10, 0);
+        scene.add(light);
+      }
+      //LIGHT TWO
+
+      {
+        const color = 0x87ceeb;
+        const intensity = 1;
+        const light = new THREE.DirectionalLight(color, intensity);
+        light.position.set(0, 10, 0);
+        light.target.position.set(-5, 0, 0);
+        scene.add(light);
+      }
+      //  LIGHT THREE
+      {
+        const color = 0xffb0b0;
+        const intensity = 10;
+        const light = new THREE.SpotLight(color, intensity);
+        light.position.set(0, 10, 0);
+        light.target.position.set(-5, 0, 0);
+        scene.add(light);
+        scene.add(light.target);
+      }
+
+      function resizeRendererToDisplaySize(renderer) {
+        const canvas = renderer.domElement;
+        const width = canvas.clientWidth;
+        const height = canvas.clientHeight;
+        const needResize = canvas.width !== width || canvas.height !== height;
+        if (needResize) {
+          renderer.setSize(width, height, false);
+        }
+        return needResize;
+      }
+
+      const boxWidth = 1;
+      const boxHeight = 1;
+      const boxDepth = 1;
+      const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
+
+      function makeInstance(geometry, color, x, y, z) {
+        const loader = new THREE.TextureLoader();
+        //https://archivetextures.net/?a=download&id=82460
+        const texture = loader.load("05ff4518509114d6890978fe30865678.jpg");
+
+        const material = new THREE.MeshBasicMaterial({ map: texture });
+
+        const cube = new THREE.Mesh(geometry, material);
+        scene.add(cube);
+
+        cube.position.x = x;
+        cube.position.y = y;
+        cube.position.z = z;
+
+        return cube;
+      }
+
+          //OBJECT 20
+              //OBJECT 21
+                  //OBJECT 22
+      const cubes = [
+        makeInstance(geometry, 0x44aa88, -5, 8, 8),
+        makeInstance(geometry, 0x8844aa, -5, 10, -9),
+        makeInstance(geometry, 0xaa8844, -5, 9, -1)
+      ];
+
+      function render(time) {
+        time *= 0.001;
+
+        if (resizeRendererToDisplaySize(renderer)) {
+          const canvas = renderer.domElement;
+          camera.aspect = canvas.clientWidth / canvas.clientHeight;
+          camera.updateProjectionMatrix();
+        }
+
+        //ANIMATION
+        cubes.forEach((cube, ndx) => {
+          const speed = 1 + ndx * 0.1;
+          const rot = time * speed;
+          cube.rotation.x = rot / 4;
+          cube.rotation.y = rot / 4;
+          cube.rotation.z = rot / 4;
+        });
+
+        renderer.render(scene, camera);
+
+        requestAnimationFrame(render);
+      }
+
+      requestAnimationFrame(render);
+    }
+
+    main();
+  </script>
+</html>
